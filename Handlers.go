@@ -13,7 +13,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "FlowState API")
 }
 
-func ListImages(w http.ResponseWriter, r *http.Request) {
+func GetImages(w http.ResponseWriter, r *http.Request) {
 
 	endpoint := "unix:///var/run/docker.sock"
 	client, err := docker.NewClient(endpoint)
@@ -29,16 +29,29 @@ func ListImages(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func ImageShow(w http.ResponseWriter, r *http.Request) {
+func GetImage(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	imageId := vars["id"]
 	endpoint := "unix:///var/run/docker.sock"
 	client, err := docker.NewClient(endpoint)
-	container, err := client.ContainerChanges(imageId)
+	container, err := client.ImageHistory(imageId)
 	if err != nil {
 		panic(err)
 	}
 	json.NewEncoder(w).Encode(container)
+}
 
+func GetContainers(w http.ResponseWriter, r *http.Request)  {
+	endpoint := "unix:///var/run/docker.sock"
+	client, err := docker.NewClient(endpoint)
+	if err != nil {
+		panic(err)
+	}
+	containers, err := client.ListContainers(docker.ListContainersOptions{All: false})
+	if err != nil {
+		panic(err)
+	}
+
+	json.NewEncoder(w).Encode(containers)
 
 }

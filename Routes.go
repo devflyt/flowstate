@@ -36,15 +36,21 @@ var routes = Routes{
 		Index,
 	},
 	Route{
-		"ListImages",
+		"GetImages",
 		"GET",
 		"/images",
-		ListImages,
+		GetImages,
 	},
 	Route{
-		"ImageShow",
+		"GetImage",
 		"GET",
 		"/image/{imageId}",
-		ImageShow,
+		GetImage,
+	},
+	Route{
+		"GetRunningContainers",
+		"GET",
+		"/running/",
+		GetContainers,
 	},
 }
